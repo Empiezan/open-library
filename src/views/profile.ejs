@@ -23,16 +23,25 @@
         <input id="book-query" name="bookQuery" class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
         <input type="submit" style="display:none"/>
       </form>
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" data-toggle="modal" data-target="#regModal" style="color: white">Register</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" data-toggle="modal" data-target="#signModal" style="color: white">Sign In</a>
-        </li>
-      </ul>
+      <% if (auth) { %>
+        <ul class="navbar-nav px-3">
+          <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logOut">Sign out</a>
+          </li>
+        </ul>
+      <% } 
+      else { %> 
+        <ul class="navbar-nav px-3">
+          <li class="nav-item text-nowrap">
+            <a class="nav-link" data-toggle="modal" data-target="#regModal" style="color: white">Register</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+              <a class="nav-link" data-toggle="modal" data-target="#signModal" style="color: white">Sign In</a>
+            </li>
+        </ul>
+      <%}%>
     </nav>
 
     <!-- Modal -->

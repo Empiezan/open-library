@@ -33,28 +33,39 @@ const bookRouter = require('./src/routes/bookRoutes');
 const bookService = require('./src/services/goodreadsService')
 // app.use('/books', bookRouter);
 
+let auth
+
 app.get('/', (req, res) => {
+    auth = req.user
     res.render(
         'index',
         {
-            auth: req.user
+            auth
         }
     );
 });
 
 app.get('/logOut', (req, res) => {
     req.logout()
+    auth = req.user
     res.redirect('/')
 })
 
 app.get('/books', (req, res) => {
     res.render(
         'bookListView',
+        {
+            auth
+        }
     )
 });
 
 app.get('/profile', (req, res) => {
-    res.render('profile')
+    res.render('profile',
+        {
+            auth
+        }
+    )
 });
 
 app.post('/signIn', 
@@ -62,7 +73,7 @@ app.post('/signIn',
         failureRedirect: '/'
     }),
     function(req, res) {
-        res.redirect('/profile')    
+        res.redirect('/')    
     }
 );
 
@@ -85,7 +96,9 @@ app.post('/register', (req, res) => {
         debug(results);
         // create user
         req.login(results.ops[0], () => {
-          res.redirect('/profile');
+          res.redirect('/profile', {
+              auth
+          });
         });
       } catch (err) {
         debug(err);
@@ -106,7 +119,8 @@ app.post('/books', (req, res) => {
                 'bookListView',
                 {
                     list: bookList.work,
-                    title: 'Library'
+                    title: 'Library',
+                    auth
                 }
             );
         } catch (err) {
@@ -121,7 +135,8 @@ app.get('/books/:id', (req, res) => {
             let book = await bookService.getBookById(req.params.id);
             res.render('bookView',
                 {
-                    book: book
+                    book: book,
+                    auth
                 }
             );
         } catch (err) {
@@ -129,7 +144,6 @@ app.get('/books/:id', (req, res) => {
         }
     }());
 });
-
 
 
 app.listen(port, () => {
